@@ -1,19 +1,15 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import Workflow from './components/CreateWorkflow'
-import './App.css'
-import SheetDemo from'./components/TriggerSheet'
+import "@xyflow/react/dist/style.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Workflow from "./components/CreateWorkflow";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+export default function App() {
   return (
-      <div>
-       <Workflow/>
-       <SheetDemo/>
+    <div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/create-workflow" element={<Workflow />} />
+        </Routes>
+      </BrowserRouter>
     </div>
-  )
+  );
 }
-
-export default App

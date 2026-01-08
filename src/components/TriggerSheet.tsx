@@ -23,6 +23,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import type { TimerNodeMetadata } from "../nodes/triggers/Timer";
+import type { PriceTriggerMetadata } from "../nodes/triggers/PriceTrigger";
+
 const SUPPORTED_TRIGGERS: {
   id: Extract<NodeKind, "price-trigger" | "timer-trigger">;
   title: string;
@@ -45,7 +48,11 @@ export const TriggerSheet = ({
 }: {
   onSelect: (kind: NodeKind, metadata: NodeMetadata) => void;
 }) => {
-  const [metadata, setMetadata] = useState<NodeMetadata>({});
+  const [metadata, setMetadata] = useState<
+    TimerNodeMetadata | PriceTriggerMetadata
+  >({
+    time: 3600,
+  });
 
   return (
     <Sheet>
@@ -57,9 +64,7 @@ export const TriggerSheet = ({
           <SheetTitle>Select trigger</SheetTitle>
           <SheetDescription>
             <Select
-              onValueChange={(value) =>
-                onSelect(value as NodeKind, metadata)
-              }
+              onValueChange={(value) => onSelect(value as NodeKind, metadata)}
             >
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Select a trigger" />

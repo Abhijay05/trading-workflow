@@ -7,6 +7,8 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { TriggerSheet } from "./TriggerSheet";
+import { PriceTrigger } from "@/nodes/triggers/PriceTrigger";
+import { Timer } from "@/nodes/triggers/Timer";
 
 export type NodeKind =
   | "price-trigger"
@@ -18,13 +20,13 @@ export type NodeMetadata = any;
 
 interface NodeType {
   data: {
-    type: "action" | "trigger";
-    kind: NodeKind;
+    type: NodeKind;
+    kind: "action" | "trigger";
     metadata: NodeMetadata;
+    label: string;
   };
   id: string;
   position: { x: number; y: number };
-  
 }
 interface Edge {
   id: string;
@@ -56,15 +58,16 @@ export default function Workflow() {
     <div style={{ width: "100vw", height: "100vh" }}>
       {!nodes.length && (
         <TriggerSheet
-          onSelect={(kind, metadata) => {
+          onSelect={(type, metadata) => {
             setNodes((prev) => [
               ...prev,
               {
                 id: Math.random().toString(),
                 data: {
-                  type: "trigger",
+                  kind: "trigger",
                   metadata,
-                  kind,
+                  type,
+                  label: type,
                 },
                 position: { x: 0, y: 0 },
               },

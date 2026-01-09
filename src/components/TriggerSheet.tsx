@@ -42,6 +42,7 @@ const SUPPORTED_TRIGGERS: {
     description: "run this whenever price crosses x",
   },
 ];
+const SUPPORTED_ASSETS = ["SOL", "BTC", "ETH"];
 
 export const TriggerSheet = ({
   onSelect,
@@ -53,6 +54,7 @@ export const TriggerSheet = ({
   >({
     time: 3600,
   });
+  const [selectedTrigger, setSelectedTrigger] = useState<string>("");
 
   return (
     <Sheet>
@@ -64,7 +66,10 @@ export const TriggerSheet = ({
           <SheetTitle>Select trigger</SheetTitle>
           <SheetDescription>
             <Select
-              onValueChange={(value) => onSelect(value as NodeKind, metadata)}
+              value={selectedTrigger}
+              onValueChange={(value) => {
+                setSelectedTrigger(value);
+              }}
             >
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Select a trigger" />
@@ -79,6 +84,50 @@ export const TriggerSheet = ({
                 </SelectGroup>
               </SelectContent>
             </Select>
+
+            {selectedTrigger === "timer-trigger" && (
+              <div>
+                Number of seconds after which to run the timer
+                <Input
+                  value={String((metadata as TimerNodeMetadata).time)}
+                  onChange={(e) =>
+                    setMetadata((metadata) => ({
+                      ...metadata,
+                      time: Number(e.target.value),
+                    }))
+                  }
+                ></Input>
+              </div>
+            )}
+
+            {selectedTrigger === "price-trigger" && (
+              <div>
+                Price:
+                <Input
+                  type="text"
+                  onChange={(e) =>
+                    setMetadata((m) => ({
+                      ...m,
+                      price: Number(e.target.value),
+                    }))
+                  }
+                ></Input>
+                <Select>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Select an asset" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {SUPPORTED_ASSETS.map((id) => (
+                        <SelectItem key={id} value={id}>
+                          {id}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
           </SheetDescription>
         </SheetHeader>
         <div className="grid flex-1 auto-rows-min gap-6 px-4">
@@ -97,6 +146,12 @@ export const TriggerSheet = ({
           </div>
         </div>
         <SheetFooter>
+          <button
+            onClick={() => onSelect(selectedTrigger as NodeKind, metadata)}
+          >
+            saveTrigger
+          </button>
+
           <SheetClose asChild>
             <Button variant="outline">Close</Button>
           </SheetClose>

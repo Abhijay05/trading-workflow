@@ -25,36 +25,33 @@ import {
 
 import type { TimerNodeMetadata } from "../nodes/triggers/Timer";
 import type { PriceTriggerMetadata } from "../nodes/triggers/PriceTrigger";
+import type { TradingMetadata } from "@/nodes/actions/Lighter";
 
-const SUPPORTED_TRIGGERS: {
-  id: Extract<NodeKind, "price-trigger" | "timer-trigger">;
-  title: string;
-  description: string;
-}[] = [
+export const SUPPORTED_ACTIONS = [
   {
-    id: "timer-trigger",
-    title: "Timer",
-    description: "run this every x seconds",
+    id: "hyperliquid",
+    title: "Hyperliquid",
+    description: "Place a trade on Hyperliquid",
   },
   {
-    id: "price-trigger",
-    title: "Price Trigger",
-    description: "run this whenever price crosses x",
+    id: "lighter",
+    title: "Lighter",
+    description: "Place a trade on Lighter",
+  },
+  {
+    id: "backpack",
+    title: "Backpack",
+    description: "Send a Backpack transaction",
   },
 ];
-export const SUPPORTED_ASSETS = ["SOL", "BTC", "ETH"];
 
 export const TriggerSheet = ({
   onSelect,
 }: {
   onSelect: (kind: NodeKind, metadata: NodeMetadata) => void;
 }) => {
-  const [metadata, setMetadata] = useState<
-    TimerNodeMetadata | PriceTriggerMetadata
-  >({
-    time: 3600,
-  });
-  const [selectedTrigger, setSelectedTrigger] = useState<string>("");
+  const [metadata, setMetadata] = useState<TradingMetadata | null>(null);
+  const [SelectedAction, setSelectedAction] = useState<string>("");
 
   return (
     <Sheet>
@@ -66,9 +63,9 @@ export const TriggerSheet = ({
           <SheetTitle>Select trigger</SheetTitle>
           <SheetDescription>
             <Select
-              value={selectedTrigger}
+              value={SelectedAction}
               onValueChange={(value) => {
-                setSelectedTrigger(value);
+                setSelectedAction(value);
               }}
             >
               <SelectTrigger className="w-[180px]">
@@ -76,7 +73,7 @@ export const TriggerSheet = ({
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  {SUPPORTED_TRIGGERS.map(({ id, title }) => (
+                  {SUPPORTED_ACTIONS.map(({ id, title }) => (
                     <SelectItem key={id} value={id}>
                       {title}
                     </SelectItem>

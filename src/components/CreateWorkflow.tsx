@@ -19,8 +19,8 @@ export type NodeKind =
 export type NodeMetadata = any;
 
 interface NodeType {
+  type: NodeKind;
   data: {
-    type: NodeKind;
     kind: "action" | "trigger";
     metadata: NodeMetadata;
     label: string;
@@ -33,6 +33,10 @@ interface Edge {
   source: string;
   target: string;
 }
+const nodeTypes = {
+  "price-trigger": PriceTrigger,
+  "timer-trigger": Timer,
+};
 
 export default function Workflow() {
   const [nodes, setNodes] = useState<NodeType[]>([]);
@@ -63,10 +67,10 @@ export default function Workflow() {
               ...prev,
               {
                 id: Math.random().toString(),
+                type,
                 data: {
                   kind: "trigger",
                   metadata,
-                  type,
                   label: type,
                 },
                 position: { x: 0, y: 0 },
@@ -79,6 +83,7 @@ export default function Workflow() {
       <ReactFlow
         nodes={nodes}
         edges={edges}
+        nodeTypes={nodeTypes}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}

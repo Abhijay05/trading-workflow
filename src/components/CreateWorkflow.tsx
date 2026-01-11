@@ -7,8 +7,13 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { TriggerSheet } from "./TriggerSheet";
-import { PriceTrigger } from "@/nodes/triggers/PriceTrigger";
-import { Timer } from "@/nodes/triggers/Timer";
+import {
+  PriceTrigger,
+  type PriceTriggerMetadata,
+} from "@/nodes/triggers/PriceTrigger";
+import { Timer, type TimerNodeMetadata } from "@/nodes/triggers/Timer";
+import type { TradingMetadata } from "@/nodes/actions/Lighter";
+import { ActionSheet } from "./ActionSheet";
 
 export type NodeKind =
   | "price-trigger"
@@ -16,7 +21,10 @@ export type NodeKind =
   | "hyperliquid"
   | "backpack"
   | "lighter";
-export type NodeMetadata = any;
+export type NodeMetadata =
+  | TradingMetadata
+  | TimerNodeMetadata
+  | PriceTriggerMetadata;
 
 interface NodeType {
   type: NodeKind;
@@ -56,6 +64,32 @@ export default function Workflow() {
     (params: any) =>
       setEdges((edgesSnapshot) => addEdge(params, edgesSnapshot)),
     []
+  );
+  const onConnectEnd = useCallback(
+    (event, connectionState) => {
+      // when a connection is dropped on the pane it's not valid
+      if (!connectionState.isValid) {
+        // we need to remove the wrapper bounds, in order to get the correct position
+        const id = getId();
+        const { clientX, clientY } =
+          "changedTouches" in event ? event.changedTouches[0] : event;
+        const newNode = {
+          id,
+          position: screenToFlowPosition({
+            x: clientX,
+            y: clientY,
+          }),
+          data: { label: `Node ${id}` },
+          origin: [0.5, 0.0],
+        };
+
+        setNodes((nds) => nds.concat(newNode));
+        setEdges((eds) =>
+          eds.concat({ id, source: connectionState.fromNode.id, target: id })
+        );
+      }
+    },
+    [screenToFlowPosition]
   );
 
   return (

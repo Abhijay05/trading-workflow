@@ -131,19 +131,7 @@ export const TriggerSheet = ({
           </SheetDescription>
         </SheetHeader>
         <div className="grid flex-1 auto-rows-min gap-6 px-4">
-          <div className="grid gap-3">
-            <Label htmlFor="sheet-demo-name">Name</Label>
-            <Input
-              id="sheet-demo-name"
-              placeholder="My trigger"
-              onChange={(e) =>
-                setMetadata((prev: NodeMetadata) => ({
-                  ...prev,
-                  name: e.target.value,
-                }))
-              }
-            />
-          </div>
+          <div className="grid gap-3"></div>
         </div>
         <SheetFooter>
           <button

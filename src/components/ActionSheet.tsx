@@ -26,6 +26,7 @@ import {
 import type { TimerNodeMetadata } from "../nodes/triggers/Timer";
 import type { PriceTriggerMetadata } from "../nodes/triggers/PriceTrigger";
 import type { TradingMetadata } from "@/nodes/actions/Lighter";
+import { SUPPORTED_ASSETS } from "./TriggerSheet";
 
 export const SUPPORTED_ACTIONS = [
   {
@@ -45,22 +46,19 @@ export const SUPPORTED_ACTIONS = [
   },
 ];
 
-export const TriggerSheet = ({
+export const ActionSheet = ({
   onSelect,
 }: {
   onSelect: (kind: NodeKind, metadata: NodeMetadata) => void;
 }) => {
-  const [metadata, setMetadata] = useState<TradingMetadata | null>(null);
+  const [metadata, setMetadata] = useState<TradingMetadata | {}>({});
   const [SelectedAction, setSelectedAction] = useState<string>("");
 
   return (
     <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="outline">Add trigger</Button>
-      </SheetTrigger>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Select trigger</SheetTitle>
+          <SheetTitle>Select Action</SheetTitle>
           <SheetDescription>
             <Select
               value={SelectedAction}
@@ -82,64 +80,60 @@ export const TriggerSheet = ({
               </SelectContent>
             </Select>
 
-            {selectedTrigger === "timer-trigger" && (
+            {
               <div>
-                Number of seconds after which to run the timer
-                <Input
-                  value={String((metadata as TimerNodeMetadata).time)}
-                  onChange={(e) =>
+                <Select
+                  value={metadata.type}
+                  onValueChange={(value) => {
                     setMetadata((metadata) => ({
                       ...metadata,
-                      time: Number(e.target.value),
-                    }))
-                  }
-                ></Input>
-              </div>
-            )}
-
-            {selectedTrigger === "price-trigger" && (
-              <div>
-                Price:
-                <Input
-                  type="text"
-                  onChange={(e) =>
-                    setMetadata((m) => ({
-                      ...m,
-                      price: Number(e.target.value),
-                    }))
-                  }
-                ></Input>
-                <Select>
+                      type: value,
+                    }));
+                  }}
+                >
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Select an asset" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {SUPPORTED_ASSETS.map((id) => (
-                        <SelectItem key={id} value={id}>
-                          {id}
+                      <SelectItem value={"long"}> LONG </SelectItem>;
+                      <SelectItem value={"short"}> SHORT </SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+            }
+            {
+              <div>
+                <Select
+                  value={metadata.symbol}
+                  onValueChange={(value) => {
+                    setMetadata((metadata) => ({
+                      ...metadata,
+                      symbol: value,
+                    }));
+                  }}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Select an asset" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {SUPPORTED_ASSETS.map((asset) => (
+                        <SelectItem key={asset} value={asset}>
+                          {asset}
                         </SelectItem>
                       ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
               </div>
-            )}
+            }
           </SheetDescription>
         </SheetHeader>
         <div className="grid flex-1 auto-rows-min gap-6 px-4">
           <div className="grid gap-3">
             <Label htmlFor="sheet-demo-name">Name</Label>
-            <Input
-              id="sheet-demo-name"
-              placeholder="My trigger"
-              onChange={(e) =>
-                setMetadata((prev: NodeMetadata) => ({
-                  ...prev,
-                  name: e.target.value,
-                }))
-              }
-            />
           </div>
         </div>
         <SheetFooter>

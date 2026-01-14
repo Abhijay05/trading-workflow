@@ -23,8 +23,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import type { TimerNodeMetadata } from "../nodes/triggers/Timer";
-import type { PriceTriggerMetadata } from "../nodes/triggers/PriceTrigger";
+import type { TimerNodeMetadata } from "common/types";
+import type { PriceTriggerMetadata } from "common/types";
 
 const SUPPORTED_TRIGGERS: {
   id: Extract<NodeKind, "price-trigger" | "timer-trigger">;
@@ -42,7 +42,6 @@ const SUPPORTED_TRIGGERS: {
     description: "run this whenever price crosses x",
   },
 ];
-export const SUPPORTED_ASSETS = ["SOL", "BTC", "ETH"];
 
 export const TriggerSheet = ({
   onSelect,

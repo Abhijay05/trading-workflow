@@ -1,7 +1,8 @@
-import { SUPPORTED_ASSETS } from "@/components/TriggerSheet";
-import type { TradingMetadata } from "./Lighter";
+import { SUPPORTED_ASSETS } from "common/types";
+import type { TradingMetadata } from "common/types";
 import { Handle, Position } from "@xyflow/react";
-export function Backpack({
+
+export function Hyperliquid({
   data,
 }: {
   data: {
@@ -18,9 +19,9 @@ export function Backpack({
       } p-4 min-w-[200px] text-white`}
     >
       <div className="flex items-center gap-2 mb-3">
-        <div className="text-xl">🎒</div>
+        <div className="text-xl">🔷</div>
         <div className="font-bold text-sm uppercase tracking-wider">
-          Backpack
+          Hyperliquid
         </div>
       </div>
       <div className="space-y-2">
@@ -45,7 +46,7 @@ export function Backpack({
             isLong ? "bg-green-900/50" : "bg-red-900/50"
           } rounded px-3 py-2`}
         >
-          <div className="text-xs opacity-75 mb-1">Symbol</div>
+          <div className="text-xs opacity-75 mb-1\">Symbol</div>
           <div className="text-lg font-bold font-mono">
             {data.metadata.symbol}
           </div>

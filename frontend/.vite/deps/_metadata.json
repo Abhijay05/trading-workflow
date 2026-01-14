@@ -1,0 +1,46 @@
+{
+  "hash": "cea66c4e",
+  "configHash": "f1dfde11",
+  "lockfileHash": "90261442",
+  "browserHash": "3f95e6b7",
+  "optimized": {
+    "react/jsx-dev-runtime": {
+      "src": "../../node_modules/.pnpm/react@19.2.3/node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "b50103b0",
+      "needsInterop": true
+    },
+    "react": {
+      "src": "../../node_modules/.pnpm/react@19.2.3/node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "03bee836",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/.pnpm/react-dom@19.2.3_react@19.2.3/node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "51e913d3",
+      "needsInterop": true
+    },
+    "react-router-dom": {
+      "src": "../../node_modules/.pnpm/react-router-dom@7.11.0_react-dom@19.2.3_react@19.2.3__react@19.2.3/node_modules/react-router-dom/dist/index.mjs",
+      "file": "react-router-dom.js",
+      "fileHash": "aaa0a322",
+      "needsInterop": false
+    },
+    "@xyflow/react": {
+      "src": "../../node_modules/.pnpm/@xyflow+react@12.10.0_@types+react@19.2.7_react-dom@19.2.3_react@19.2.3__react@19.2.3/node_modules/@xyflow/react/dist/esm/index.js",
+      "file": "@xyflow_react.js",
+      "fileHash": "8ffe188c",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-SSTACCCB": {
+      "file": "chunk-SSTACCCB.js"
+    },
+    "chunk-VDACGF22": {
+      "file": "chunk-VDACGF22.js"
+    }
+  }
+}

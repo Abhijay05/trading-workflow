@@ -4,11 +4,13 @@
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
   ],
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
       "common/*": ["../../packages/common/*"]
     }
-  }
+  },
+  "include": ["src"]
 }

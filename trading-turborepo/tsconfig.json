@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+
+    // Enable workspace path aliasing
+    "baseUrl": ".",
+    "paths": {
+      "db": ["packages/db"],
+      "db/*": ["packages/db/*"]
+    },
+
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+
+    // for declaration builds (optional)
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true
+  },
+
+  // Include all workspace code
+  "include": ["apps", "packages"]
+}

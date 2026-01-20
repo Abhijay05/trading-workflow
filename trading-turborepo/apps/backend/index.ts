@@ -4,6 +4,7 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import { SignupSchema, SigninSchema } from "packages/common/types";
+import { authMiddleware } from "./middleware";
 mongoose.connect(process.env.MONGO_URL!);
 const JWT_SECRET = process.env.JWT_SECRET!;
 
@@ -67,6 +68,11 @@ app.post("/signin", async (req, res) => {
     });
   }
 });
+
+app.get("/workflow", authMiddleware, (req, res) => {
+  const userId = req.userId!;
+});
+
 app.listen(3000, () => {
   console.log("Server running on port 3000");
 });

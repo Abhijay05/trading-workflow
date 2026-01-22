@@ -28,19 +28,9 @@ import { SUPPORTED_ASSETS } from "../../../../packages/common/metadata";
 
 export const SUPPORTED_ACTIONS = [
   {
-    id: "hyperliquid",
-    title: "Hyperliquid",
-    description: "Place a trade on Hyperliquid",
-  },
-  {
-    id: "lighter",
-    title: "Lighter",
-    description: "Place a trade on Lighter",
-  },
-  {
-    id: "backpack",
-    title: "Backpack",
-    description: "Send a Backpack transaction",
+    id: "swap",
+    title: "Swap",
+    description: "Execute swap on Cronos via x402",
   },
 ];
 
@@ -58,102 +48,143 @@ export const ActionSheet = ({
 
   return (
     <Sheet open={true}>
-      <SheetContent>
+      <SheetContent className="bg-gradient-to-b from-slate-950 via-slate-950 to-slate-900 text-slate-100 border-l border-white/10">
         <SheetHeader>
-          <SheetTitle>Select Action</SheetTitle>
-          <SheetDescription>
-            Select the type of action
+          <SheetTitle className="text-slate-100 tracking-tight">Select Action</SheetTitle>
+          <SheetDescription className="text-slate-400">
+            Configure what happens when the trigger fires
+          </SheetDescription>
+        </SheetHeader>
+
+        <div className="space-y-6 mt-6">
+          <div className="space-y-2 rounded-xl border border-white/10 bg-white/5 p-4 shadow-sm">
+            <Label className="text-slate-200 text-base font-semibold">Action Type</Label>
             <Select
               value={SelectedAction}
               onValueChange={(value) => {
                 setSelectedAction(value);
               }}
             >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select a trigger" />
+              <SelectTrigger className="w-full bg-white/5 border-white/10 text-slate-100 focus:ring-2 focus:ring-indigo-400/30">
+                <SelectValue placeholder="Select action" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  {SUPPORTED_ACTIONS.map(({ id, title }) => (
+                  {SUPPORTED_ACTIONS.map(({ id, title, description }) => (
                     <SelectItem key={id} value={id}>
-                      {title}
+                      <div>
+                        <div className="font-medium">{title}</div>
+                        <div className="text-xs text-slate-400">{description}</div>
+                      </div>
                     </SelectItem>
                   ))}
                 </SelectGroup>
               </SelectContent>
             </Select>
-            {
-              <div>
-                Type
-                <Select
-                  value={metadata.type}
-                  onValueChange={(value) => {
-                    setMetadata((metadata) => ({
-                      ...metadata,
-                      type: value,
-                    }));
-                  }}
-                >
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Select a type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value={"long"}> LONG </SelectItem>
-                      <SelectItem value={"short"}> SHORT </SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
-            }
-            {
-              <div>
-                Symbol
-                <Select
-                  value={metadata.symbol}
-                  onValueChange={(value) => {
-                    setMetadata((metadata) => ({
-                      ...metadata,
-                      symbol: value,
-                    }));
-                  }}
-                >
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Select an asset" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      {SUPPORTED_ASSETS.map((asset) => (
-                        <SelectItem key={asset} value={asset}>
-                          {asset}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
-            }
+          </div>
+          
+          <div className="space-y-2 rounded-xl border border-white/10 bg-white/5 p-4 shadow-sm">
+            <Label className="text-slate-200 text-base font-semibold">Direction</Label>
+            <Select
+              value={(metadata as TradingMetadata).type}
+              onValueChange={(value) => {
+                setMetadata((meta) => ({
+                  ...meta,
+                  type: value as "LONG" | "SHORT",
+                }));
+              }}
+            >
+              <SelectTrigger className="w-full bg-white/5 border-white/10 text-slate-100 focus:ring-2 focus:ring-indigo-400/30">
+                <SelectValue placeholder="Select direction" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="LONG">
+                    <div className="flex items-center gap-2">
+                      <span className="text-green-400">↑</span>
+                      <span>BUY (LONG)</span>
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="SHORT">
+                    <div className="flex items-center gap-2">
+                      <span className="text-red-400">↓</span>
+                      <span>SELL (SHORT)</span>
+                    </div>
+                  </SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2 rounded-xl border border-white/10 bg-white/5 p-4 shadow-sm">
+            <Label className="text-slate-200 text-base font-semibold">Asset</Label>
+            <Select
+              value={(metadata as TradingMetadata).symbol}
+              onValueChange={(value) => {
+                setMetadata((meta) => ({
+                  ...meta,
+                  symbol: value,
+                }));
+              }}
+            >
+              <SelectTrigger className="w-full bg-white/5 border-white/10 text-slate-100 focus:ring-2 focus:ring-indigo-400/30">
+                <SelectValue placeholder="Select asset" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {SUPPORTED_ASSETS.map((asset) => (
+                    <SelectItem key={asset} value={asset}>
+                      {asset}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2 rounded-xl border border-white/10 bg-white/5 p-4 shadow-sm">
+            <Label className="text-slate-200 text-base font-semibold">Quantity (USDC.e)</Label>
             <Input
-              value={(metadata as TradingMetadata).qty}
+              type="number"
+              step="0.01"
+              min="0"
+              placeholder="e.g., 50"
+              className="bg-white/5 border-white/10 text-slate-100 placeholder:text-slate-400 focus-visible:ring-2 focus-visible:ring-indigo-400/30"
+              value={(metadata as TradingMetadata).qty || ""}
               onChange={(e) =>
-                setMetadata((metadata) => ({
-                  ...metadata,
-                  qty: Number(e.target.value),
+                setMetadata((meta) => ({
+                  ...meta,
+                  qty: Number(e.target.value) || 0,
                 }))
               }
-            ></Input>
-          </SheetDescription>
-        </SheetHeader>
+            />
+            <div className="text-xs text-slate-400">
+              Amount to swap in USDC.e (6 decimals)
+            </div>
+          </div>
+        </div>
 
-        <SheetFooter>
-          <button
-            onClick={() => onSelect(SelectedAction as NodeKind, metadata)}
+        <SheetFooter className="mt-6">
+          <Button
+            onClick={() => {
+              if (!SelectedAction) {
+                alert("Please select an action type");
+                return;
+              }
+              if (!(metadata as TradingMetadata).type || !(metadata as TradingMetadata).qty) {
+                alert("Please fill in all fields");
+                return;
+              }
+              onSelect(SelectedAction as NodeKind, metadata as TradingMetadata);
+            }}
+            className="w-full bg-indigo-500 hover:bg-indigo-400 text-white shadow-lg shadow-indigo-500/20"
           >
-            saveTrigger
-          </button>
-
+            Save Action
+          </Button>
           <SheetClose asChild>
-            <Button variant="outline">Close</Button>
+            <Button variant="outline" className="bg-white/10 border-white/15 text-white hover:bg-white/15">
+              Close
+            </Button>
           </SheetClose>
         </SheetFooter>
       </SheetContent>

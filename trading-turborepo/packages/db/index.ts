@@ -83,8 +83,31 @@ const WorkflowSchema = new Schema({
     required: true,
     ref: "Users",
   },
+  name: {
+    type: String,
+    default: "Untitled Workflow",
+  },
+  strategy: {
+    type: String,
+    enum: ["smart", "normal"],
+    default: "normal",
+  },
+  dipThresholdPct: {
+    type: Number,
+  },
+  volThresholdPct: {
+    type: Number,
+  },
   edges: [EdgesSchema],
   nodes: [WorkflowNodesSchema],
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 const CredentialsTypeSchema = new Schema({
   title: {
@@ -118,9 +141,23 @@ const ExecutionSchema = new Schema({
     required: true,
     ref: "Workflows",
   },
+  triggerNodeId: {
+    type: String,
+  },
   status: {
     type: String,
     enum: ["PENDING", "SUCCESS", "FAILURE"],
+  },
+  decision: {
+    type: String,
+    enum: ["BUY", "HEDGE", "IDLE"],
+  },
+  market: Schema.Types.Mixed,
+  txHash: {
+    type: String,
+  },
+  error: {
+    type: String,
   },
   startTime: {
     type: Date,
@@ -129,6 +166,11 @@ const ExecutionSchema = new Schema({
   },
   endTime: {
     type: Date,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+    required: true,
   },
 });
 

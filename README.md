@@ -31,7 +31,6 @@ This app treats trading logic as a **graph of connected nodes**:
 - 🪙 Designed specifically for **crypto markets**
 - ⚙️ Strategy logic without writing full bots
 - 🔄 Reusable and extensible workflow components
-- 🧪 Can be extended to support backtesting & simulation
 
 ---
 
